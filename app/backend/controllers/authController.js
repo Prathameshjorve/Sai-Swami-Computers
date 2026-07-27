@@ -1,3 +1,5 @@
+// Admin authentication controller
+// Fixed admin login export
 const Admin = require('../models/Admin');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');

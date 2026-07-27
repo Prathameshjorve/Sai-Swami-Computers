@@ -1,3 +1,17 @@
+const Admin = require('../models/Admin');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const generateToken = (id) => {
+    return jwt.sign(
+        { id },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: process.env.JWT_EXPIRE || '7d',
+        }
+    );
+};
+
 const loginAdmin = async (req, res, next) => {
     try {
         console.log("BODY:", req.body);
@@ -51,4 +65,8 @@ const loginAdmin = async (req, res, next) => {
         console.error(error);
         next(error);
     }
+};
+
+module.exports = {
+    loginAdmin
 };

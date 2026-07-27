@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const morgan = require('morgan');
+const path = require('path');
 
 const { errorHandler } = require('./middleware/errorMiddleware');
 
@@ -16,8 +17,8 @@ const companyRoutes = require('./routes/companyRoutes');
 
 const app = express();
 
-// Security Middleware
-app.use(helmet());
+// Security Middleware (allow cross-origin images for frontend)
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
 // CORS configuration (only allow frontend URL)
 const corsOptions = {
@@ -49,6 +50,9 @@ if (process.env.NODE_ENV === 'development') {
 } else {
     app.use(morgan('combined'));
 }
+
+// Static files serving for locally uploaded images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/admin', authRoutes);

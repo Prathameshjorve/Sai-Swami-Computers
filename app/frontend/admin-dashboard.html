@@ -475,9 +475,38 @@
                         </select>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                        <input type="url" id="prod-image" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl"
-                            placeholder="https://...">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Product Image (Upload from PC or
+                            Mobile)</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-primary transition bg-gray-50 mb-3 cursor-pointer"
+                            onclick="document.getElementById('prod-image-file').click()">
+                            <input type="file" id="prod-image-file" accept="image/*" class="hidden"
+                                onchange="handleImageFileSelect(event, 'prod-image', 'prod-preview-container', 'prod-preview-img')">
+                            <div id="prod-preview-container" class="hidden mb-3">
+                                <img id="prod-preview-img" src="" alt="Image Preview"
+                                    class="max-h-48 mx-auto rounded-lg shadow-sm object-contain border bg-white">
+                                <span class="text-xs text-primary font-semibold mt-2 block">Click to select a different
+                                    picture</span>
+                            </div>
+                            <div id="prod-upload-prompt" class="py-2">
+                                <svg class="w-10 h-10 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                                <p class="text-sm font-medium text-gray-700">Click to upload image from your PC or
+                                    Mobile device</p>
+                                <p class="text-xs text-gray-500 mt-1">Supports PNG, JPG, WEBP, GIF (Saved locally
+                                    without cloud needed!)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-gray-500 font-medium">Or paste an external Image URL:</span>
+                            <input type="text" id="prod-image"
+                                class="flex-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary"
+                                placeholder="https://... or data:image/..."
+                                oninput="updateImagePreviewFromInput('prod-image', 'prod-preview-container', 'prod-preview-img', 'prod-upload-prompt')">
+                        </div>
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -524,9 +553,37 @@
                             placeholder="e.g., ₹500 onwards">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                        <input type="url" id="svc-image" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl"
-                            placeholder="https://...">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Service Image (Upload from PC or
+                            Mobile)</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-accent transition bg-gray-50 mb-3 cursor-pointer"
+                            onclick="document.getElementById('svc-image-file').click()">
+                            <input type="file" id="svc-image-file" accept="image/*" class="hidden"
+                                onchange="handleImageFileSelect(event, 'svc-image', 'svc-preview-container', 'svc-preview-img')">
+                            <div id="svc-preview-container" class="hidden mb-3">
+                                <img id="svc-preview-img" src="" alt="Image Preview"
+                                    class="max-h-40 mx-auto rounded-lg shadow-sm object-contain border bg-white">
+                                <span class="text-xs text-accent font-semibold mt-2 block">Click to select a different
+                                    picture</span>
+                            </div>
+                            <div id="svc-upload-prompt" class="py-2">
+                                <svg class="w-10 h-10 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                                <p class="text-sm font-medium text-gray-700">Click to upload image from your PC or
+                                    Mobile device</p>
+                                <p class="text-xs text-gray-500 mt-1">Supports PNG, JPG, WEBP, GIF</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-gray-500 font-medium">Or paste Image URL:</span>
+                            <input type="text" id="svc-image"
+                                class="flex-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-accent"
+                                placeholder="https://... or data:image/..."
+                                oninput="updateImagePreviewFromInput('svc-image', 'svc-preview-container', 'svc-preview-img', 'svc-upload-prompt')">
+                        </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -588,6 +645,69 @@
             get(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; } },
             set(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
         };
+
+        // ==================== IMAGE FILE UPLOAD HELPERS ====================
+        function handleImageFileSelect(event, inputId, previewContainerId, previewImgId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const dataUrl = e.target.result;
+                    document.getElementById(inputId).value = dataUrl;
+                    const previewImg = document.getElementById(previewImgId);
+                    const previewContainer = document.getElementById(previewContainerId);
+                    const uploadPrompt = document.getElementById(inputId === 'prod-image' ? 'prod-upload-prompt' : 'svc-upload-prompt');
+
+                    if (previewImg && previewContainer) {
+                        previewImg.src = dataUrl;
+                        previewContainer.classList.remove('hidden');
+                        if (uploadPrompt) uploadPrompt.classList.add('hidden');
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function updateImagePreviewFromInput(inputId, previewContainerId, previewImgId, uploadPromptId) {
+            const val = document.getElementById(inputId).value.trim();
+            const previewImg = document.getElementById(previewImgId);
+            const previewContainer = document.getElementById(previewContainerId);
+            const uploadPrompt = document.getElementById(uploadPromptId);
+
+            if (val && (val.startsWith('http') || val.startsWith('data:image'))) {
+                if (previewImg && previewContainer) {
+                    previewImg.src = val;
+                    previewContainer.classList.remove('hidden');
+                    if (uploadPrompt) uploadPrompt.classList.add('hidden');
+                }
+            } else {
+                if (previewContainer) previewContainer.classList.add('hidden');
+                if (uploadPrompt) uploadPrompt.classList.remove('hidden');
+            }
+        }
+
+        function resetImagePreview(inputId, previewContainerId, uploadPromptId, imageUrl = null) {
+            const previewContainer = document.getElementById(previewContainerId);
+            const uploadPrompt = document.getElementById(uploadPromptId);
+            const input = document.getElementById(inputId);
+            const previewImg = document.getElementById(inputId === 'prod-image' ? 'prod-preview-img' : 'svc-preview-img');
+            const fileInput = document.getElementById(inputId === 'prod-image' ? 'prod-image-file' : 'svc-image-file');
+
+            if (fileInput) fileInput.value = '';
+            if (imageUrl) {
+                input.value = imageUrl;
+                if (previewImg && previewContainer) {
+                    previewImg.src = imageUrl;
+                    previewContainer.classList.remove('hidden');
+                    if (uploadPrompt) uploadPrompt.classList.add('hidden');
+                }
+            } else {
+                input.value = '';
+                if (previewImg) previewImg.src = '';
+                if (previewContainer) previewContainer.classList.add('hidden');
+                if (uploadPrompt) uploadPrompt.classList.remove('hidden');
+            }
+        }
 
         // Toast notification
         function showToast(message, type = 'success') {
@@ -688,11 +808,12 @@
                 document.getElementById('prod-condition').value = product.condition;
                 document.getElementById('prod-price').value = product.price;
                 document.getElementById('prod-availability').value = product.availability;
-                document.getElementById('prod-image').value = product.image || '';
                 document.getElementById('prod-description').value = product.description || '';
+                resetImagePreview('prod-image', 'prod-preview-container', 'prod-upload-prompt', product.image || '');
             } else {
                 document.getElementById('product-form').reset();
                 document.getElementById('prod-id').value = '';
+                resetImagePreview('prod-image', 'prod-preview-container', 'prod-upload-prompt', null);
             }
         }
 
@@ -780,13 +901,14 @@
                 document.getElementById('svc-id').value = service.id;
                 document.getElementById('svc-name').value = service.name;
                 document.getElementById('svc-price').value = service.price;
-                document.getElementById('svc-image').value = service.image || '';
                 document.getElementById('svc-description').value = service.description || '';
                 document.getElementById('svc-enabled').checked = service.enabled !== false;
+                resetImagePreview('svc-image', 'svc-preview-container', 'svc-upload-prompt', service.image || '');
             } else {
                 document.getElementById('service-form').reset();
                 document.getElementById('svc-id').value = '';
                 document.getElementById('svc-enabled').checked = true;
+                resetImagePreview('svc-image', 'svc-preview-container', 'svc-upload-prompt', null);
             }
         }
 

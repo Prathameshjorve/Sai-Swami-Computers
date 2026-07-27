@@ -86,23 +86,45 @@
                 }
             })();
 
-        // Login form handler
-        document.getElementById('admin-login-form').addEventListener('submit', function (e) {
+        document.getElementById('admin-login-form').addEventListener('submit', async function (e) {
             e.preventDefault();
+
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
             const errorEl = document.getElementById('login-error');
 
-            // Dummy credentials
-            if (username === 'admin' && password === 'admin123') {
-                sessionStorage.setItem('adminLoggedIn', 'true');
-                window.location.href = 'admin-dashboard.html';
-            } else {
-                errorEl.classList.remove('hidden');
-                errorEl.classList.add('animate-fade-in');
-                setTimeout(() => {
-                    errorEl.classList.add('hidden');
-                }, 3000);
+            errorEl.classList.add('hidden');
+
+            try {
+                const response = await fetch(
+                    "https://sai-swami-backend.onrender.com/admin/login",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username,
+                            password
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (data.success) {
+                    sessionStorage.setItem("adminLoggedIn", "true");
+                    sessionStorage.setItem("adminToken", data.data.token);
+                    window.location.href = "admin-dashboard.html";
+                } else {
+                    errorEl.textContent = data.message || "Invalid Username or Password";
+                    errorEl.classList.remove("hidden");
+                }
+
+            } catch (err) {
+                console.error(err);
+                errorEl.textContent = "Unable to connect to server.";
+                errorEl.classList.remove("hidden");
             }
         });
     </script>
